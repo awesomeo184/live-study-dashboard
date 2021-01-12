@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -26,12 +27,31 @@ public class App {
         }
 
         int totalWeeks = firstSeasonIssues.size();
-        List<Participant> participants = Participants.getList();
-        for (Participant participant : participants) {
-            String rate = String.format("%.2f", participant.getRate(totalWeeks));
-            System.out.println("아이디 : " + participant.getUserName() + " 참여율 : " + rate);
-        }
+        PrintWriter pw = new PrintWriter("result.md");
 
+        StringBuilder title = new StringBuilder();
+        StringBuilder tableMarkDown = new StringBuilder();
+        title.append("| 참여자 ");
+        for (int i = 1; i <= totalWeeks; i++) {
+            String result = "| " + i + "주차 ";
+            title.append(result);
+            tableMarkDown.append("| --- ");
+        }
+        title.append("| 출석률 |");
+        tableMarkDown.append("| --- | --- |");
+
+        pw.println(title.toString());
+        pw.println(tableMarkDown.toString());
+
+
+        List<Participant> participants = Participants.getList();
+        participants.forEach(p -> {
+            String row = String.format("| %s %s | %.2f%% |",
+                p.getUserName(), p.makeRow(totalWeeks), p.getRate(totalWeeks));
+            pw.println(row);
+        });
+
+        pw.close();
     }
 
     private static void rotateCommentsWithCheckingAttendance(GHIssue issue) throws IOException {

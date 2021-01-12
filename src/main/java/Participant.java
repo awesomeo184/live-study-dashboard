@@ -23,4 +23,16 @@ public class Participant {
 
         return count * 100 / totalWeeks;
     }
+
+    public String makeRow(int totalWeeks) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 1 ; i <= totalWeeks; i++) {
+            if(rollBook.containsKey(i) && rollBook.get(i)) {
+                result.append("|:white_check_mark:");
+            } else {
+                result.append("|");
+            }
+        }
+        return result.toString();
+    }
 }
