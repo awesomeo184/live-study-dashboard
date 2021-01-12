@@ -25,6 +25,13 @@ public class App {
             rotateCommentsWithCheckingAttendance(issue);
         }
 
+        int totalWeeks = firstSeasonIssues.size();
+        List<Participant> participants = Participants.getList();
+        for (Participant participant : participants) {
+            String rate = String.format("%.2f", participant.getRate(totalWeeks));
+            System.out.println("아이디 : " + participant.getUserName() + " 참여율 : " + rate);
+        }
+
     }
 
     private static void rotateCommentsWithCheckingAttendance(GHIssue issue) throws IOException {

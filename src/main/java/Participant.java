@@ -18,4 +18,9 @@ public class Participant {
         rollBook.put(weekNumber, true);
     }
 
+    public double getRate(double totalWeeks) {
+        long count = rollBook.values().stream().filter(value -> value).count();
+
+        return count * 100 / totalWeeks;
+    }
 }
