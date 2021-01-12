@@ -17,4 +17,5 @@ public class Participant {
     public void checkAttendance(int weekNumber) {
         rollBook.put(weekNumber, true);
     }
+
 }

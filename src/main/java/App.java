@@ -19,36 +19,32 @@ public class App {
         GHRepository repository = gitHub.getRepository("awesomeo184/live-study").getSource();
         List<GHIssue> allIssues = repository.getIssues(GHIssueState.ALL);
 
-        List<Participant> participants = new ArrayList<>();
 
         List<GHIssue> firstSeasonIssues = getFirstSeasonIssues(allIssues);
         for (GHIssue issue : firstSeasonIssues) {
-            int weekNumber = issue.getNumber();
-            List<GHIssueComment> comments = issue.getComments();
-            for (GHIssueComment comment : comments) {
-                if (comment.getUrl() != null) {
-                    String userName = comment.getUser().getLogin();
-                    Participant participant = findParticipant(participants, userName);
-                    participant.checkAttendance(weekNumber);
-                }
-            }
+            rotateCommentsWithCheckingAttendance(issue);
+        }
+
+    }
+
+    private static void rotateCommentsWithCheckingAttendance(GHIssue issue) throws IOException {
+        int weekNumber = issue.getNumber();
+        List<GHIssueComment> comments = issue.getComments();
+        for (GHIssueComment comment : comments) {
+            checkAttendance(weekNumber, comment);
         }
     }
 
-    private static Participant findParticipant(List<Participant> participants, String userName) {
-        if (isNewUser(participants, userName)) {
-            Participant participant = new Participant(userName);
-            participants.add(participant);
-            return participant;
+    private static void checkAttendance(int weekNumber, GHIssueComment comment) throws IOException {
+        if (hasUrl(comment)) {
+            String userName = comment.getUser().getLogin();
+            Participant participant = Participants.findParticipant(userName);
+            participant.checkAttendance(weekNumber);
         }
-        return participants.stream()
-            .filter(p -> p.getUserName().equals(userName))
-            .findFirst()
-            .orElseThrow();
     }
 
-    private static boolean isNewUser(List<Participant> participants, String userName) {
-        return participants.stream().noneMatch(p -> p.getUserName().equals(userName));
+    private static boolean hasUrl(GHIssueComment comment) {
+        return comment.getUrl() != null;
     }
 
     private static List<GHIssue> getFirstSeasonIssues(List<GHIssue> issues) {
