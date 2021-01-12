@@ -12,7 +12,7 @@
 
 이를 바탕으로 출석률 계산기를 만듭니다.
 
-최종 결과물은 이런 형태가 될 겁니다.
+[최종 결과물](https://github.com/awesomeo184/live-study-dashboard/blob/master/result.md)은 이런 형태가 될 겁니다.
 
 ![img](https://blog.kakaocdn.net/dn/KiIEW/btqSIZuBo5E/nKlqHxQSpAC3QGk13uP5UK/img.jpg)
 
@@ -483,4 +483,6 @@ participants.forEach(p -> {
 
 pw.close();
 ```
+
+
 
